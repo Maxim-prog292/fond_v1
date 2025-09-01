@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Благотворительный фонд — Доверие и прозрачность</title>
+  <meta name="description" content="Благотворительный фонд: помощь нуждающимся, прозрачные отчёты, пожертвования (закят, садака, фитр)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Заголовки с арабским акцентом (Amiri), основной текст — Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #0f6b3b;     /* благородный зелёный */
+      --green-700: #0a4c2a;
+      --gold: #D4AF37;      /* тёплое золото */
+      --gold-600: #b8941f;
+      --bg: #f7f8f8;        /* светлый чистый фон */
+      --text: #1f2a2e;      /* базовый тёмный */
+      --muted: #6b7a7e;     /* приглушённый */
+      --white: #ffffff;
+      --glass: rgba(255,255,255,0.55);
+      --glass-brd: rgba(255,255,255,0.35);
+      --shadow: 0 10px 30px rgba(15,107,59,0.07), 0 6px 12px rgba(15,107,59,0.06);
+      --radius: 16px;
+    }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+    }
+
+    /* Полупрозрачный геометрический орнамент на фоне */
+    .pattern-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(212,175,55,0.06), transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(15,107,59,0.06), transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(15,107,59,0.05), transparent 40%),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 100 100" fill="none" stroke="rgba(15,107,59,0.07)" stroke-width="0.4"><defs><pattern id="p" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M10 0 L20 10 L10 20 L0 10 Z"/><circle cx="10" cy="10" r="3" fill="rgba(212,175,55,0.08)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23p)"/></svg>');
+      background-size: auto, auto, auto, 600px 600px;
+      opacity: .55;
+      filter: contrast(110%) saturate(105%);
+    }
+
+    /* Навигация */
+    .nav {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to right, rgba(255,255,255,.75), rgba(255,255,255,.6));
+      border-bottom: 1px solid var(--glass-brd);
+      z-index: 50;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+    .brand { display: flex; gap: 12px; align-items: center; font-weight: 700; color: var(--green); }
+    .brand .logo {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, var(--gold), var(--gold-600));
+      box-shadow: 0 4px 12px rgba(212,175,55,.3);
+      position: relative;
+      isolation: isolate;
+    }
+    .brand .logo::after {
+      content: ""; position: absolute; inset: 8px; border-radius: 50%;
+      background: conic-gradient(from 0deg, rgba(255,255,255,.7), rgba(255,255,255,0) 60%);
+      mix-blend-mode: screen;
+    }
+    .nav a { text-decoration: none; color: var(--text); font-weight: 600; }
+    .menu { display: flex; gap: 18px; align-items: center; }
+    .btn-donate {
+      background: linear-gradient(135deg, var(--gold), #f3d37a);
+      color: #2f2500; padding: 10px 16px; border-radius: 999px; font-weight: 800; border: none; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(212,175,55,.35);
+      transition: transform .15s ease, box-shadow .2s ease;
+    }
+    .btn-donate:hover { transform: translateY(-1px); box-shadow: 0 12px 26px rgba(212,175,55,.5); }
+
+    /* Герой */
+    .hero {
+      position: relative; padding: 80px 0 60px; display: grid; gap: 24px; align-items: center;
+      grid-template-columns: 1.1fr .9fr;
+    }
+    .hero .headline {
+      font-family: 'Amiri', serif; font-size: clamp(36px, 5vw, 56px); line-height: 1.15; color: var(--green-700);
+      letter-spacing: .2px;
+    }
+    .hero .sub { color: var(--muted); font-size: 18px; }
+    .hero .card {
+      background: var(--glass); backdrop-filter: blur(16px); border: 1px solid var(--glass-brd);
+      box-shadow: var(--shadow); padding: 20px; border-radius: var(--radius);
+    }
+    .hero .photo {
+      border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow);
+      aspect-ratio: 16/11; min-height: 280px;
+      background: url('https://images.unsplash.com/photo-1542144582-1ba00456b5d1?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+      position: relative;
+    }
+    .hero .photo::after {
+      content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(15,107,59,.0), rgba(15,107,59,.15));
+    }
+
+    /* Секции */
+    section { padding: 60px 0; }
+    .section-title {
+      font-family: 'Amiri', serif; font-size: 32px; color: var(--green-700); margin: 0 0 16px; letter-spacing: .3px;
+    }
+    .muted { color: var(--muted); }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+
+    .glass { background: var(--glass); border: 1px solid var(--glass-brd); backdrop-filter: blur(14px); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .pad { padding: 18px; }
+
+    /* Прозрачность: счётчики */
+    .stat { text-align: center; padding: 14px; }
+    .stat .num { font-weight: 800; font-size: clamp(28px,4vw,40px); color: var(--green-700); }
+    .stat .lbl { color: var(--muted); font-weight: 600; }
+
+    /* Цитаты */
+    .quote { position: relative; padding: 22px; border-left: 6px solid var(--green); }
+    .quote em { font-family: 'Amiri', serif; font-size: 22px; letter-spacing: .2px; color: var(--text); display:block; }
+    .quote small { color: var(--muted); font-weight: 600; }
+
+    /* Истории людей */
+    .story { display: grid; grid-template-columns: 120px 1fr; gap: 14px; align-items: start; }
+    .story .pic { width: 120px; height: 120px; border-radius: 12px; background: #ddd center/cover no-repeat; box-shadow: var(--shadow); }
+    .story .name { font-weight: 700; color: var(--green-700); }
+
+    /* Форма пожертвования */
+    .donate { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
+    .tabbar { display:flex; gap:8px; flex-wrap: wrap; }
+    .tab { padding: 10px 14px; border-radius: 12px; border: 1px solid var(--glass-brd); cursor:pointer; background: rgba(255,255,255,.7); font-weight:700; }
+    .tab.active { background: linear-gradient(135deg, #eaf6f0, #fff); color: var(--green-700); border-color: rgba(15,107,59,.25); }
+    .amounts { display:flex; gap:10px; flex-wrap:wrap; }
+    .chip { padding:10px 12px; border-radius: 999px; border:1px solid var(--glass-brd); cursor:pointer; background:#fff; font-weight:700; }
+    .chip:hover { border-color: rgba(15,107,59,.35); }
+    .field { display:flex; flex-direction:column; gap:8px; }
+    input[type="text"], input[type="email"], input[type="number"], select, textarea {
+      padding: 12px 14px; border-radius: 12px; border:1px solid #e3e6e7; background:#fff; font-size:16px;
+    }
+    .pay-cta { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn-primary { background: linear-gradient(135deg, var(--green), #1d8a54); color: #fff; padding: 12px 18px; border-radius: 999px; border: none; font-weight: 800; cursor: pointer; box-shadow: 0 10px 24px rgba(15,107,59,.35); }
+    .btn-primary:hover { filter: brightness(1.05); }
+    .safe { display:flex; align-items:center; gap:8px; color: var(--muted); font-size:14px; }
+
+    /* Отчёты */
+    .doc { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px dashed #e3e6e7; }
+    .doc:last-child { border-bottom: none; }
+    .doc a { color: var(--green-700); font-weight:700; text-decoration:none; }
+
+    /* Контакты */
+    .contacts { display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+    .map { height: 280px; border-radius: 12px; overflow: hidden; background:#e7ecec; display:grid; place-items:center; color: var(--muted); }
+
+    footer { padding: 28px 0; color: #fff; background: linear-gradient(180deg, var(--green-700), #07351e); }
+    footer .row { display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+
+    /* Мобильная адаптация */
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; }
+      .donate { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .contacts { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="pattern-bg" aria-hidden="true"></div>
+
+  <!-- Навигация -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Фонд милосердия</span>
+      </div>
+      <nav class="menu">
+        <a href="#mission">Миссия</a>
+        <a href="#transparency">Прозрачность</a>
+        <a href="#quotes">Цитаты</a>
+        <a href="#stories">Истории</a>
+        <a href="#donate">Пожертвовать</a>
+        <a href="#contacts">Контакты</a>
+        <button class="btn-donate" onclick="document.getElementById('donate').scrollIntoView({behavior:'smooth'})">Пожертвовать</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Герой -->
+  <section class="container hero" id="hero">
+    <div class="content">
+      <h1 class="headline">Помогая другим, мы приближаемся к Аллаху</h1>
+      <p class="sub">Наш фонд поддерживает нуждающихся семьи, детей и пожилых. Мы делаем акцент на прозрачности: каждый рубль отражён в отчётах, каждый случай — подтверждён документами.</p>
+      <div class="pad glass" style="display:flex; align-items:center; gap: 14px; flex-wrap:wrap;">
+        <button class="btn-primary" onclick="document.getElementById('donate').scrollIntoView({behavior:'smooth'})">Сделать пожертвование</button>
+        <div class="safe" title="Безопасная обработка платежей">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z" stroke="currentColor" stroke-width="1.5"/><path d="M8.5 12l2.5 2.5L15.5 10" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span>Шифрование платежей • Реквизиты по требованию</span>
+        </div>
+      </div>
+    </div>
+    <div class="photo card" role="img" aria-label="Фото мечети на фоне заката"></div>
+  </section>
+
+  <!-- Миссия -->
+  <section id="mission">
+    <div class="container">
+      <h2 class="section-title">Миссия фонда</h2>
+      <p class="muted">Мы оказываем адресную помощь нуждающимся: продуктовые наборы, лекарства, экстренная поддержка семей и пожилых. Наша работа основана на исламских ценностях: <strong>садака</strong> — добровольное пожертвование, <strong>закят</strong> — обязательная милостыня для имеющих достаток, и <strong>фитр</strong> — милостыня в конце Рамадана.</p>
+      <div class="grid-3">
+        <div class="pad glass">
+          <h3 style="margin-top:0">Адресная помощь</h3>
+          <p class="muted">Сбор и доставка продуктов, лекарств и одежды для конкретных семей. Подтверждение — отчёт и фото «до/после».</p>
+        </div>
+        <div class="pad glass">
+          <h3 style="margin-top:0">Образование и дети</h3>
+          <p class="muted">Помощь детям-сиротам и многодетным: учебные материалы, кружки, лагеря. Принцип — бережно и с уважением.</p>
+        </div>
+        <div class="pad glass">
+          <h3 style="margin-top:0">Поддержка пожилых</h3>
+          <p class="muted">Регулярные визиты, помощь по дому и оплате лечения. Каждая история — с подтверждающими документами.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Прозрачность -->
+  <section id="transparency">
+    <div class="container">
+      <h2 class="section-title">Прозрачность</h2>
+      <p class="muted">Мы публикуем суммы, отчёты, сканы документов и фото-отчёты. Вы видите путь средств от пожертвования до получателя.</p>
+      <div class="grid-3">
+        <div class="glass pad stat">
+          <div class="num" data-count="12547">0</div>
+          <div class="lbl">пожертвований</div>
+        </div>
+        <div class="glass pad stat">
+          <div class="num" data-count="3879">0</div>
+          <div class="lbl">людей получили помощь</div>
+        </div>
+        <div class="glass pad stat">
+          <div class="num" data-count="92">0</div>
+          <div class="lbl">проекта в работе</div>
+        </div>
+      </div>
+      <div class="glass pad" style="margin-top:16px">
+        <div class="doc"><span>Отчёт за июль 2025 (PDF, 2.1 МБ)</span><a href="#" download>Скачать</a></div>
+        <div class="doc"><span>Сводный реестр благополучателей (обезличено)</span><a href="#" download>Скачать</a></div>
+        <div class="doc"><span>Скан лицензии и регистрационных документов</span><a href="#" download>Скачать</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Цитаты Корана и хадисов -->
+  <section id="quotes">
+    <div class="container">
+      <h2 class="section-title">Напоминания из Корана и хадисов</h2>
+      <div class="grid-2">
+        <div class="glass quote">
+          <em>«…и творите добро — быть может, вы преуспеете.»</em>
+          <small class="muted">(Коран, 22:77) — проверьте точность цитаты перед публикацией</small>
+        </div>
+        <div class="glass quote">
+          <em>«Лучшие люди — те, кто наиболее полезен людям.»</em>
+          <small class="muted">(хадис, ат-Табарани) — укажите точный источник</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Истории людей -->
+  <section id="stories">
+    <div class="container">
+      <h2 class="section-title">Истории тех, кому вы помогли</h2>
+      <div class="grid-2">
+        <div class="glass pad story">
+          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1493836512294-502baa1986e2?q=80&w=800&auto=format&fit=crop');"></div>
+          <div>
+            <div class="name">Семья Х.</div>
+            <p class="muted">До: не хватало на лекарства и учебники. После: оформлена регулярная помощь, дети обеспечены школьными наборами. <strong>Подтверждение:</strong> акт, чеки, фото.</p>
+          </div>
+        </div>
+        <div class="glass pad story">
+          <div class="pic" style="background-image:url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800&auto=format&fit=crop');"></div>
+          <div>
+            <div class="name">Амина, 72 года</div>
+            <p class="muted">До: сложная реабилитация после операции. После: оплачены процедуры, организован транспорт и уход. <strong>Документы:</strong> счета, договор.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Форма пожертвования -->
+  <section id="donate">
+    <div class="container">
+      <h2 class="section-title">Сделать пожертвование</h2>
+      <p class="muted">Выберите вид пожертвования и удобный способ оплаты. Чем меньше шагов — тем проще совершить благое дело.
+      </p>
+      <div class="donate">
+        <!-- Левая колонка: настройка пожертвования -->
+        <div class="glass pad">
+          <div class="field">
+            <label for="donType"><strong>Вид пожертвования</strong></label>
+            <div class="tabbar" id="donType">
+              <button class="tab active" data-type="zakah" aria-pressed="true">Закят</button>
+              <button class="tab" data-type="sadaqah">Садака</button>
+              <button class="tab" data-type="fitr">Фитр</button>
+            </div>
+          </div>
+          <div class="field">
+            <label><strong>Сумма</strong></label>
+            <div class="amounts">
+              <button class="chip" data-amt="500">500</button>
+              <button class="chip" data-amt="1000">1 000</button>
+              <button class="chip" data-amt="3000">3 000</button>
+              <button class="chip" data-amt="5000">5 000</button>
+              <button class="chip" data-amt="10000">10 000</button>
+              <input type="number" id="amount" min="1" placeholder="Своя сумма" style="width: 160px;">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="name"><strong>Ваше имя</strong></label>
+              <input id="name" type="text" placeholder="Например, Ахмад" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="email"><strong>E‑mail (для чека)</strong></label>
+              <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="frequency"><strong>Периодичность</strong></label>
+              <select id="frequency">
+                <option value="once">Разово</option>
+                <option value="monthly">Ежемесячно</option>
+                <option value="weekly">Еженедельно</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="comment"><strong>Намерение (нийя) / комментарий</strong></label>
+              <input id="comment" type="text" placeholder="Например: ради довольства Аллаха">
+            </div>
+          </div>
+          <div class="pay-cta">
+            <button class="btn-primary" id="payBtn">Перейти к оплате</button>
+            <div class="safe">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor"/><path d="M7 12l3 3 7-7" stroke="currentColor"/></svg>
+              <span>Оплата картой, Apple/Google Pay</span>
+            </div>
+          </div>
+          <p id="formMsg" class="muted" style="margin-top:8px"></p>
+        </div>
+
+        <!-- Правая колонка: доверие и реквизиты -->
+        <aside class="glass pad">
+          <h3 style="margin-top:0">Почему нам доверяют</h3>
+          <ul>
+            <li><strong>Отчётность:</strong> публикуем ежемесячные PDF-отчёты с подтверждениями.</li>
+            <li><strong>Прозрачность:</strong> обезличенные реестры получателей.</li>
+            <li><strong>Поддержка имамов:</strong> рекомендации и отзывы (сканы писем).</li>
+          </ul>
+          <div class="grid-2">
+            <div class="glass pad" style="text-align:center">
+              <div style="font-weight:800; color: var(--green)">Реквизиты</div>
+              <small class="muted">БИК, ИНН, счёт — по кнопке</small><br>
+              <a class="tab" href="#" onclick="alert('Здесь откроются реквизиты и QR-код СБП'); return false;">Показать реквизиты</a>
+            </div>
+            <div class="glass pad" style="text-align:center">
+              <div style="font-weight:800; color: var(--green)">Сертификаты</div>
+              <small class="muted">Лицензии, регистрация</small><br>
+              <a class="tab" href="#" onclick="alert('Здесь откроются сканы сертификатов/лицензий'); return false;">Показать документы</a>
+            </div>
+          </div>
+          <div class="safe" style="margin-top:12px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z" stroke="currentColor"/><path d="M8.5 12l2.5 2.5L15.5 10" stroke="currentColor"/></svg>
+            <span>Данные защищены. Мы не передаём контакты третьим лицам.</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Отчёты и медиа -->
+  <section id="reports">
+    <div class="container">
+      <h2 class="section-title">Отчёты, фото и видео</h2>
+      <div class="grid-3">
+        <div class="glass pad">
+          <h4 style="margin: 0 0 6px">Фотоотчёт: «Продуктовые наборы — июль»</h4>
+          <p class="muted">10 локаций, 120 наборов. Ссылки на оригиналы фото.</p>
+          <a href="#">Смотреть альбом</a>
+        </div>
+        <div class="glass pad">
+          <h4 style="margin: 0 0 6px">Видео: «Отчёт за квартал»</h4>
+          <p class="muted">Краткий ролик о проделанной работе и планах.</p>
+          <a href="#">Смотреть видео</a>
+        </div>
+        <div class="glass pad">
+          <h4 style="margin: 0 0 6px">Финансовый отчёт (XLSX)</h4>
+          <p class="muted">Постатейные суммы, даты и назначение платежей.</p>
+          <a href="#" download>Скачать таблицу</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Контакты и доверие -->
+  <section id="contacts">
+    <div class="container">
+      <h2 class="section-title">Контакты</h2>
+      <div class="contacts">
+        <div class="glass pad">
+          <p><strong>Адрес:</strong> ул. Примерная, 15, Москва</p>
+          <p><strong>Телефон:</strong> <a href="tel:+79990000000">+7 999 000‑00‑00</a></p>
+          <p><strong>E‑mail:</strong> <a href="mailto:info@fond.ru">info@fond.ru</a></p>
+          <p><strong>Соцсети:</strong> <a href="#">Telegram</a> • <a href="#">VK</a> • <a href="#">YouTube</a></p>
+          <hr>
+          <p><strong>Отзывы имамов:</strong></p>
+          <ul>
+            <li>Письмо‑рекомендация от имама мечети №1 (скан).</li>
+            <li>Видео‑обращение имама общины №2.</li>
+          </ul>
+        </div>
+        <div class="map glass">
+          <span>Здесь будет карта (встраиваемый виджет)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container row">
+      <div>© <span id="y"></span> Благотворительный фонд. Все права защищены.</div>
+      <div>Политика конфиденциальности • Пользовательское соглашение</div>
+    </div>
+  </footer>
+
+  <script>
+    // Год
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Анимация счётчиков прозрачности
+    const counters = document.querySelectorAll('.num[data-count]');
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    const animateCounter = (el) => {
+      const target = parseInt(el.dataset.count, 10) || 0;
+      const start = performance.now();
+      const dur = 1500 + Math.random()*500;
+      const step = (now) => {
+        const p = Math.min(1, (now - start) / dur);
+        const v = Math.round(ease(p) * target);
+        el.textContent = v.toLocaleString('ru-RU');
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target.querySelector('.num')); obs.unobserve(e.target); } })
+    }, {threshold: 0.4});
+    document.querySelectorAll('#transparency .stat').forEach(s => obs.observe(s));
+
+    // Переключение типа пожертвования
+    const tabs = document.querySelectorAll('.tabbar .tab');
+    let currentType = 'zakah';
+    tabs.forEach(t => t.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('active')); t.classList.add('active');
+      currentType = t.dataset.type;
+    }));
+
+    // Быстрый выбор суммы
+    const amountInput = document.getElementById('amount');
+    document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+      amountInput.value = c.dataset.amt;
+    }));
+
+    // Псевдо‑обработка оплаты (заглушка)
+    document.getElementById('payBtn').addEventListener('click', () => {
+      const amt = parseFloat(amountInput.value || '0');
+      const email = document.getElementById('email').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const freq = document.getElementById('frequency').value;
+      const msg = document.getElementById('formMsg');
+      if (!amt || amt <= 0) { msg.textContent = 'Укажите сумму пожертвования.'; msg.style.color = '#b00020'; return; }
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.textContent = 'Проверьте e‑mail для отправки чека.'; msg.style.color = '#b00020'; return; }
+      msg.style.color = '';
+      const kind = currentType === 'zakah' ? 'закят' : (currentType === 'sadaqah' ? 'садака' : 'фитр');
+      msg.textContent = `Спасибо! Вы выбрали ${kind}, сумма ${amt.toLocaleString('ru-RU')} ₽ (${freq === 'once' ? 'разово' : freq==='monthly'?'ежемесячно':'еженедельно'}). Здесь откроется платёжная страница.`;
+      // TODO: интеграция с платёжным провайдером + редирект
+      alert('Заглушка: здесь будет переход на платёжную страницу.');
+    });
+  </script>
+</body>
+</html>
